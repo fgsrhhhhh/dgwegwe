@@ -1,0 +1,13 @@
+import hashlib
+
+def merkle_root(transactions):
+    if len(transactions) == 1:
+        return transactions[0].hash
+    else:
+        new_transactions = []
+        for i in range(0, len(transactions)-1, 2):
+            hash_pair = transactions[i].hash + transactions[i+1].hash
+            new_transactions.append(hashlib.sha256(hash_pair.encode()).hexdigest())
+        if len(transactions) % 2 == 1:
+            new_transactions.append(transactions[-1].hash)
+        return merkle_root(new_transactions)
